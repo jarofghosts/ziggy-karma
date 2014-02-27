@@ -1,0 +1,31 @@
+{
+  "name": "ziggy-karma",
+  "version": "0.0.0",
+  "description": "karma plugin for ziggy bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jarofghosts/ziggy-karma.git"
+  },
+  "keywords": [
+    "ziggy",
+    "karma",
+    "plugin",
+    "irc",
+    "bot"
+  ],
+  "author": "jesse keane",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jarofghosts/ziggy-karma/issues"
+  },
+  "homepage": "https://github.com/jarofghosts/ziggy-karma",
+  "dependencies": {
+    "levelup": "~0.18.2",
+    "leveldown": "~0.10.2",
+    "level": "~0.18.0"
+  }
+}
