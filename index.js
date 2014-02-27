@@ -2,7 +2,9 @@ var levelup = require('levelup')
 
 var db = levelup('./karma-db')
 
-module.exports = function (ziggy) {
+module.exports = karma
+
+function karma(ziggy) {
   ziggy.on('message', parse_command)
 
   function parse_command(user, channel, text) {
