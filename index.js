@@ -9,7 +9,7 @@ function karma(ziggy) {
 
   function parse_command(user, channel, text) {
     var bits = text.split(' ')
-      , karma_user = bits[1]
+      , karma_user = bits.slice(1)
       , command = bits[0]
 
     if (command[0] !== '!') return
@@ -25,35 +25,40 @@ function karma(ziggy) {
     }[command] || noop)()
 
     function add_point() {
+      if (!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
       db.get(karma_user, add_karma)
 
       function add_karma(err, previous) {
-        if (err) previous = 0
+        if (err.type === 'NotFoundError') previous = 0
         db.put(karma_user, ++previous, noop)
       }
     }
 
     function sub_point() {
+      if (!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing terrible work, ' + karma_user + '!')
       db.get(karma_user, sub_karma)
 
       function sub_karma(err, previous) {
-        if (err) previous = 0
+        if (err.type === 'NotFoundError') previous = 0
         db.put(karma_user, --previous, noop)
       }
     }
 
     function check_points() {
+      if (!karma_user) karma_user = user.nick
       db.get(karma_user, show_karma)
 
       function show_karma(err, previous) {
-        if (err) previous = 0
+        if (err.type === 'NotFoundError') previous = 0
 
         var point_word = previous === '1' ? 'point' : 'points'
 
-        ziggy.say(channel, karma_user + ' has ' + previous + ' karma ' +
-            point_word + '!')
+        ziggy.say(
+            channel
+          , karma_user + ' has ' + previous + ' karma ' + point_word + '!'
+        )
       }
     }
   }
