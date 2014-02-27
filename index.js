@@ -9,7 +9,7 @@ function karma(ziggy) {
 
   function parse_command(user, channel, text) {
     var bits = text.split(' ')
-      , karma_user = bits.slice(1)
+      , karma_user = bits.length > 1 ? bits.slice(1) : null
       , command = bits[0]
 
     if (command[0] !== '!') return
@@ -30,7 +30,7 @@ function karma(ziggy) {
       db.get(karma_user, add_karma)
 
       function add_karma(err, previous) {
-        if (err.type === 'NotFoundError') previous = 0
+        if (err && err.type === 'NotFoundError') previous = 0
         db.put(karma_user, ++previous, noop)
       }
     }
@@ -41,7 +41,7 @@ function karma(ziggy) {
       db.get(karma_user, sub_karma)
 
       function sub_karma(err, previous) {
-        if (err.type === 'NotFoundError') previous = 0
+        if (err && err.type === 'NotFoundError') previous = 0
         db.put(karma_user, --previous, noop)
       }
     }
@@ -51,7 +51,7 @@ function karma(ziggy) {
       db.get(karma_user, show_karma)
 
       function show_karma(err, previous) {
-        if (err.type === 'NotFoundError') previous = 0
+        if (err && err.type === 'NotFoundError') previous = 0
 
         var point_word = previous === '1' ? 'point' : 'points'
 
