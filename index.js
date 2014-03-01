@@ -9,7 +9,7 @@ function karma(ziggy) {
 
   function parse_command(user, channel, text) {
     var bits = text.split(' ')
-      , karma_user = bits.length > 1 ? bits.slice(1).join(' ') : null
+      , karma_user = bits.length > 1 ? bits.slice(1).join(' ').trim() : null
       , command = bits[0]
 
     if (command[0] !== '!') return
