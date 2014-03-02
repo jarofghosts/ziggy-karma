@@ -21,6 +21,7 @@ function karma(ziggy) {
       , '!ty': add_point
       , '!dm': sub_point
       , '!demerit': sub_point
+      , '!boo': sub_point
       , '!k': check_points
       , '!karma': check_points
     }[command] || noop)()
@@ -31,7 +32,11 @@ function karma(ziggy) {
       db.get(karma_user, add_karma)
 
       function add_karma(err, previous) {
-        if (err && err.type === 'NotFoundError') previous = 0
+        if (err) {
+          if (err.type !== 'NotFoundError') return
+          previous = 0
+        }
+
         db.put(karma_user, ++previous, noop)
       }
     }
@@ -42,7 +47,11 @@ function karma(ziggy) {
       db.get(karma_user, sub_karma)
 
       function sub_karma(err, previous) {
-        if (err && err.type === 'NotFoundError') previous = 0
+        if (err) {
+          if (err.type !== 'NotFoundError') return
+          previous = 0
+        }
+
         db.put(karma_user, --previous, noop)
       }
     }
@@ -52,7 +61,10 @@ function karma(ziggy) {
       db.get(karma_user, show_karma)
 
       function show_karma(err, previous) {
-        if (err && err.type === 'NotFoundError') previous = 0
+        if (err) {
+          if (err.type !== 'NotFoundError') return
+          previous = 0
+        }
 
         var point_word = previous === '1' ? 'point' : 'points'
 
