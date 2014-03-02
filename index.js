@@ -18,6 +18,7 @@ function karma(ziggy) {
         '!m': add_point
       , '!merit': add_point
       , '!thanks': add_point
+      , '!ty': add_point
       , '!dm': sub_point
       , '!demerit': sub_point
       , '!k': check_points
