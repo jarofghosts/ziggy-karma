@@ -18,8 +18,8 @@ function karma(ziggy) {
         '!m': add_point
       , '!motivate': add_point
       , '!merit': add_point
-      , '!thanks': add_point
-      , '!ty': add_point
+      , '!thanks': thank_user
+      , '!ty': thank_user
       , '!dm': sub_point
       , '!demotivate': sub_point
       , '!demerit': sub_point
@@ -28,6 +28,15 @@ function karma(ziggy) {
       , '!karma': check_points
       , 'flog': sub_ten_points
     }[command] || noop)()
+
+    function add_karma(err, previous) {
+      if (err) {
+        if (err.type !== 'NotFoundError') return
+        previous = 0
+      }
+
+      db.put(karma_user, ++previous, noop)
+    }
 
     function add_point() {
       if (!karma_user) karma_user = channel
@@ -88,15 +97,6 @@ function karma(ziggy) {
           , karma_user + ' has ' + previous + ' karma ' + point_word + '!'
         )
       }
-    }
-
-    function add_karma(err, previous) {
-      if (err) {
-        if (err.type !== 'NotFoundError') return
-        previous = 0
-      }
-
-      db.put(karma_user, ++previous, noop)
     }
   }
 }
