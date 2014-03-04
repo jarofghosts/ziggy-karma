@@ -29,20 +29,19 @@ function karma(ziggy) {
       , '!flog': sub_ten_points
     }[command] || noop)()
 
+    function add_karma(err, previous) {
+      if (err) {
+        if (err.type !== 'NotFoundError') return
+        previous = 0
+      }
+
+      db.put(karma_user, ++previous, noop)
+    }
 
     function add_point() {
       if (!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
       db.get(karma_user, add_karma)
-
-      function add_karma(err, previous) {
-        if (err) {
-          if (err.type !== 'NotFoundError') return
-          previous = 0
-        }
-
-        db.put(karma_user, ++previous, noop)
-      }
     }
 
     function sub_point() {
