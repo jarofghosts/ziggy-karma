@@ -16,29 +16,23 @@ function karma(ziggy) {
 
     ({
         '!m': add_point
+      , '!motivate': add_point
       , '!merit': add_point
       , '!thanks': add_point
       , '!ty': add_point
       , '!dm': sub_point
+      , '!demotivate': sub_point
       , '!demerit': sub_point
       , '!boo': sub_point
       , '!k': check_points
       , '!karma': check_points
+      , 'flog': sub_ten_points
     }[command] || noop)()
 
     function add_point() {
       if (!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
       db.get(karma_user, add_karma)
-
-      function add_karma(err, previous) {
-        if (err) {
-          if (err.type !== 'NotFoundError') return
-          previous = 0
-        }
-
-        db.put(karma_user, ++previous, noop)
-      }
     }
 
     function sub_point() {
@@ -54,6 +48,27 @@ function karma(ziggy) {
 
         db.put(karma_user, --previous, noop)
       }
+    }
+
+    function sub_ten_points() {
+      if (!karma_user) karma_user = channel
+      ziggy.say(channel, 'You\'re doing terrible work, ' + karma_user + '! You must be flogged.')
+      db.get(karma_user, sub_ten_karma)
+
+      function sub_ten_karma(err, previous) {
+        if (err) {
+          if (err.type !== 'NotFoundError') return
+          previous = 0
+        }
+
+        db.put(karma_user, previous -= 10, noop)
+      }
+    }
+
+    function thank_user(){
+      if (!karma_user) karma_user = channel
+      ziggy.say(channel, 'Thank you, ' + karma_user + ', you are a fine human being!');
+      db.get(karma_user, add_karma);
     }
 
     function check_points() {
@@ -73,6 +88,15 @@ function karma(ziggy) {
           , karma_user + ' has ' + previous + ' karma ' + point_word + '!'
         )
       }
+    }
+
+    function add_karma(err, previous) {
+      if (err) {
+        if (err.type !== 'NotFoundError') return
+        previous = 0
+      }
+
+      db.put(karma_user, ++previous, noop)
     }
   }
 }
