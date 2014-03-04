@@ -5,7 +5,7 @@ a karma plugin for [ziggy](https://github.com/jarofghosts/ziggy)
 
 ## usage
 
-#### !m, !merit, !motivate, !thanks, ty `<name>`
+#### !m, !merit, !motivate, !thanks, !ty `<name>`
 
 add a karma point to `<name>`
 
@@ -13,7 +13,7 @@ add a karma point to `<name>`
 
 remove a karma point from `<name>`
 
-#### !flog
+#### !flog `<name>`
 
 remove 10 points from `<name>`
 
