@@ -1,6 +1,6 @@
 {
   "name": "ziggy-karma",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "karma plugin for ziggy bot",
   "main": "index.js",
   "scripts": {
