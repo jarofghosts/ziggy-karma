@@ -20,6 +20,8 @@ function karma(ziggy) {
       , '!merit': add_point
       , '!thanks': thank_user
       , '!ty': thank_user
+      , '!high-five': high_five
+      , '!hf': high_five
       , '!dm': sub_point
       , '!demotivate': sub_point
       , '!demerit': sub_point
@@ -42,6 +44,21 @@ function karma(ziggy) {
       if (!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
       db.get(karma_user, add_karma)
+    }
+
+    function add_ten_points() {
+      if (!karma_user) karma_user = channel
+      ziggy.say(channel, 'High five, ' + karma_user + '! Great work!')
+      db.get(karma_user, add_ten_karma)
+
+      function add_ten_karma(err, previous) {
+        if (err) {
+          if (err.type !== 'NotFoundError') return
+          previous = 0
+        }
+
+        db.put(karma_user, previous += 10, noop)
+      }
     }
 
     function sub_point() {
