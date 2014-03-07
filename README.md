@@ -9,6 +9,10 @@ a karma plugin for [ziggy](https://github.com/jarofghosts/ziggy)
 
 add a karma point to `<name>`
 
+#### !highfive, !hf `<name>`
+
+add ten karma points to `<name>`
+
 #### !dm, !demerit, !demotivate `<name>`
 
 remove a karma point from `<name>`
