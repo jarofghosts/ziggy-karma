@@ -76,7 +76,7 @@ function karma(ziggy) {
           previous = 0
         }
 
-        db.put(karma_user, previous = parseInt(previous) - 10, noop)
+        db.put(karma_user, previous -= 10, noop)
       }
     }
 
@@ -91,7 +91,7 @@ function karma(ziggy) {
           previous = 0
         }
 
-        db.put(karma_user, previous = parseInt(previous) + 10, noop)
+        db.put(karma_user, previous = +previous + 10, noop)
       }
     }
 
