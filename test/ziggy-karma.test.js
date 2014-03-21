@@ -19,16 +19,22 @@ function run_test(command, channel, nick, ziggy_message, karma) {
       t.plan(4)
 
       fake_ziggy.say = function(to, message) {
-        t.equal(to, channel)
-        t.equal(message, ziggy_message)
+        t.equal(to, channel, 'channel is ' + channel)
+        t.equal(message, ziggy_message, 'says "' + ziggy_message + '"')
       }
 
       function test_karma(err) {
-        t.ok(!err)
+        t.ok(!err, 'no error')
 
         db.get(nick || channel, function(err, value) {
           var diff = value - start
-          t.equal(diff, karma)
+          t.equal(
+              diff
+            , karma
+            , (karma < 0 ? 'subtracts' : 'adds') +
+              ' ' + Math.abs(karma) + ' karma'
+          )
+
           t.end()
         })
       }
@@ -110,8 +116,8 @@ function check_test(command, channel, nick, ziggy_message, karma) {
       t.plan(2)
 
       fake_ziggy.say = function(to, message) {
-        t.equal(to, channel)
-        t.equal(message, ziggy_message)
+        t.equal(to, channel, 'channel is ' + channel)
+        t.equal(message, ziggy_message, 'says "' + ziggy_message + '"')
       }
 
       fake_ziggy.emit('message', {nick: 'al'}, channel, command + ' ' + nick)
