@@ -44,6 +44,32 @@ function run_test(command, channel, nick, ziggy_message, karma) {
   })
 }
 
+function check_test(command, channel, nick, ziggy_message, karma) {
+  test(command + ' works', function(t) {
+    var db = levelup('/lol', {db: memdown})
+      , fake_ziggy = new EE()
+
+    db.put(nick || 'lol', karma, finish)
+
+    function finish() {
+      karma_plugin(fake_ziggy, db, done)
+
+      t.plan(2)
+
+      fake_ziggy.say = function(to, message) {
+        t.equal(to, channel, 'channel is ' + channel)
+        t.equal(message, ziggy_message, 'says "' + ziggy_message + '"')
+      }
+
+      fake_ziggy.emit('message', {nick: 'al'}, channel, command + ' ' + nick)
+
+      function done() {
+        t.end()
+      }
+    }
+  })
+}
+
 run_test('!hf', '#narf', 'doofus', 'High five, doofus! Great work!', 10)
 run_test('!hf', '#narf', '', 'High five, #narf! Great work!', 10)
 run_test('!highfive', '#scarf', 'roofus', 'High five, roofus! Great work!', 10)
@@ -102,32 +128,6 @@ run_test(
   , 'Thank you, #narf, you are a fine human being!'
   , 1
 )
-
-function check_test(command, channel, nick, ziggy_message, karma) {
-  test(command + ' works', function(t) {
-    var db = levelup('/lol', {db: memdown})
-      , fake_ziggy = new EE()
-
-    db.put(nick || 'lol', karma, finish)
-
-    function finish() {
-      karma_plugin(fake_ziggy, db, done)
-
-      t.plan(2)
-
-      fake_ziggy.say = function(to, message) {
-        t.equal(to, channel, 'channel is ' + channel)
-        t.equal(message, ziggy_message, 'says "' + ziggy_message + '"')
-      }
-
-      fake_ziggy.emit('message', {nick: 'al'}, channel, command + ' ' + nick)
-
-      function done() {
-        t.end()
-      }
-    }
-  })
-}
 
 check_test('!k', '#woo', 'larry', 'larry has 5 karma points!', 5)
 check_test('!karma', '#woo', 'harry', 'harry has 1 karma point!', 1)
