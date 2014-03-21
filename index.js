@@ -4,8 +4,9 @@ var ziggy_db = levelup('./karma-db')
 
 module.exports = karma
 
-function karma(ziggy, _db) {
-  var db = _db || ziggy_db
+function karma(ziggy, _db, _onchange) {
+  var onchange = _onchange || noop
+    , db = _db || ziggy_db
 
   ziggy.on('message', parse_command)
 
@@ -32,19 +33,6 @@ function karma(ziggy, _db) {
       , '!karma': check_points
       , '!flog': flog
     }[command] || noop)()
-
-    function set_karma(entity, diff) {
-      db.get(entity, modify_karma)
-
-      function modify_karma(err, current) {
-        if (err) {
-          if (err.type !== 'NotFoundError') return
-          current = 0
-        }
-
-        db.put(entity, current + diff, noop)
-      }
-    }
 
     function motivate() {
       if (!karma_user) karma_user = channel
@@ -105,6 +93,19 @@ function karma(ziggy, _db) {
           , karma_user + ' has ' + previous + ' karma ' + point_word + '!'
         )
       }
+    }
+  }
+
+  function set_karma(entity, diff) {
+    db.get(entity, modify_karma)
+
+    function modify_karma(err, current) {
+      if (err) {
+        if (err.type !== 'NotFoundError') return
+        current = 0
+      }
+
+      db.put(entity, +current + diff, onchange)
     }
   }
 }
