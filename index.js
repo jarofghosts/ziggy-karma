@@ -1,10 +1,12 @@
 var levelup = require('levelup')
 
-var db = levelup('./karma-db')
+var ziggy_db = levelup('./karma-db')
 
 module.exports = karma
 
-function karma(ziggy) {
+function karma(ziggy, _db) {
+  var db = _db || ziggy_db
+
   ziggy.on('message', parse_command)
 
   function parse_command(user, channel, text) {
@@ -15,84 +17,65 @@ function karma(ziggy) {
     if (command[0] !== '!') return
 
     ({
-        '!m': add_point
-      , '!motivate': add_point
-      , '!merit': add_point
+        '!m': motivate
+      , '!motivate': motivate
+      , '!merit': motivate
       , '!thanks': thank_user
       , '!ty': thank_user
       , '!highfive': high_five
       , '!hf': high_five
-      , '!dm': sub_point
-      , '!demotivate': sub_point
-      , '!demerit': sub_point
-      , '!boo': sub_point
+      , '!dm': demotivate
+      , '!demotivate': demotivate
+      , '!demerit': demotivate
+      , '!boo': demotivate
       , '!k': check_points
       , '!karma': check_points
-      , '!flog': sub_ten_points
+      , '!flog': flog
     }[command] || noop)()
 
-    function add_karma(err, previous) {
-      if (err) {
-        if (err.type !== 'NotFoundError') return
-        previous = 0
-      }
+    function set_karma(entity, diff) {
+      db.get(entity, modify_karma)
 
-      db.put(karma_user, ++previous, noop)
-    }
-
-    function add_point() {
-      if (!karma_user) karma_user = channel
-      ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
-      db.get(karma_user, add_karma)
-    }
-
-    function sub_point() {
-      if (!karma_user) karma_user = channel
-      ziggy.say(channel, 'You\'re doing terrible work, ' + karma_user + '!')
-      db.get(karma_user, sub_karma)
-
-      function sub_karma(err, previous) {
+      function modify_karma(err, current) {
         if (err) {
           if (err.type !== 'NotFoundError') return
-          previous = 0
+          current = 0
         }
 
-        db.put(karma_user, --previous, noop)
+        db.put(entity, current + diff, noop)
       }
     }
 
-    function sub_ten_points() {
+    function motivate() {
+      if (!karma_user) karma_user = channel
+      ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
+
+      set_karma(karma_user, 1)
+    }
+
+    function demotivate() {
+      if (!karma_user) karma_user = channel
+      ziggy.say(channel, 'You\'re doing terrible work, ' + karma_user + '!')
+
+      set_karma(karma_user, -1)
+    }
+
+    function flog() {
       if (!karma_user) karma_user = channel
       ziggy.say(
           channel
         , 'You\'re doing terrible work, ' + karma_user +
           '! You must be flogged.'
       )
-      db.get(karma_user, sub_ten_karma)
 
-      function sub_ten_karma(err, previous) {
-        if (err) {
-          if (err.type !== 'NotFoundError') return
-          previous = 0
-        }
-
-        db.put(karma_user, previous - 10, noop)
-      }
+      set_karma(karma_user, -10)
     }
 
     function high_five() {
       if (!karma_user) karma_user = channel
       ziggy.say(channel, 'High five, ' + karma_user + '! Great work!')
-      db.get(karma_user, add_ten_karma)
 
-      function add_ten_karma(err, previous) {
-        if (err) {
-          if (err.type !== 'NotFoundError') return
-          previous = 0
-        }
-
-        db.put(karma_user, +previous + 10, noop)
-      }
+      set_karma(karma_user, 10)
     }
 
     function thank_user() {
@@ -101,7 +84,8 @@ function karma(ziggy) {
           channel
         , 'Thank you, ' + karma_user + ', you are a fine human being!'
       )
-      db.get(karma_user, add_karma)
+
+      set_karma(karma_user, 1)
     }
 
     function check_points() {
