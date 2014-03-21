@@ -1,6 +1,8 @@
 ziggy-karma
 ====
 
+[![Build Status](https://travis-ci.org/jarofghosts/ziggy-karma.png?branch=master)](https://travis-ci.org/jarofghosts/ziggy-karma)
+
 a karma plugin for [ziggy](https://github.com/jarofghosts/ziggy)
 
 ## usage
@@ -13,7 +15,7 @@ add a karma point to `<name>`
 
 add ten karma points to `<name>`
 
-#### !dm, !demerit, !demotivate `<name>`
+#### !dm, !demerit, !demotivate, !boo `<name>`
 
 remove a karma point from `<name>`
 
