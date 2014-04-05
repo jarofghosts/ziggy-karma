@@ -132,3 +132,30 @@ run_test(
 check_test('!k', '#woo', 'larry', 'larry has 5 karma points!', 5)
 check_test('!karma', '#woo', 'harry', 'harry has 1 karma point!', 1)
 check_test('!karma', '#woo', '', 'al has 0 karma points!', 0)
+
+test('karma key is case-insensitive', function(t) {
+  var db = levelup('/lol', {db: memdown})
+    , fake_ziggy = new EE()
+
+  karma_plugin(fake_ziggy, db, test_karma)
+
+  t.plan(3)
+
+  fake_ziggy.say = function(to, message) {
+    t.equal(
+        message
+      , 'You\'re doing great work, HA!'
+      , 'message is case-correct'
+    )
+  }
+
+  function test_karma(err) {
+    t.ok(!err, 'no error')
+
+    db.get('ha', function(err, value) {
+      t.equal(+value, 1, 'karma added to lower case')
+    })
+  }
+
+  fake_ziggy.emit('message', {nick: 'al'}, '#a', '!m HA')
+})
