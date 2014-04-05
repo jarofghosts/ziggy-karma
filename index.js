@@ -78,7 +78,7 @@ function karma(ziggy, _db, _onchange) {
 
     function check_points() {
       if (!karma_user) karma_user = user.nick
-      db.get(karma_user, show_karma)
+      db.get(karma_user.toLowerCase(), show_karma)
 
       function show_karma(err, previous) {
         if (err) {
@@ -96,7 +96,8 @@ function karma(ziggy, _db, _onchange) {
     }
   }
 
-  function set_karma(entity, diff) {
+  function set_karma(_entity, diff) {
+    var entity = _entity.toLowerCase()
     db.get(entity, modify_karma)
 
     function modify_karma(err, current) {
