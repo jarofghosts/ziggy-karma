@@ -2,6 +2,14 @@ var levelup = require('levelup')
 
 var ziggy_db = levelup('./karma-db')
 
+karma.help = [
+    '!m, !thanks, !ty <name> - add karma to <name>'
+  , '!dm, !boo <name> - remove karma from <name>'
+  , '!hf <name> - add *lots* of karma to <name>'
+  , '!flog <name> - remove *lots* of karma from <name>'
+  , '!k <name> - check <name>\'s karma score'
+].join('\n')
+
 module.exports = karma
 
 function karma(ziggy, _db, _onchange) {
