@@ -40,11 +40,24 @@ function karma(ziggy, _db, _onchange) {
       , '!k': check_points
       , '!karma': check_points
       , '!flog': flog
+      , '!durant' : durant
     }[command] || noop)()
 
     function motivate() {
       if (!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
+
+      set_karma(karma_user, 1)
+    }
+
+    function durant() {
+      if (!karma_user) karma_user = channel
+
+      if(karma_user === channel){
+        ziggy.say(channel, 'Thanks' + karma_user + '. You guys and gals are da real mvps.')
+      }else{
+        ziggy.say(channel, 'Thanks' + karma_user + '. You da real mvp.')
+      }
 
       set_karma(karma_user, 1)
     }
