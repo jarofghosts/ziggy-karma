@@ -1,13 +1,14 @@
 ziggy-karma
 ====
 
-[![Build Status](https://travis-ci.org/jarofghosts/ziggy-karma.png?branch=master)](https://travis-ci.org/jarofghosts/ziggy-karma)
+[![Build Status](http://img.shields.io/travis/jarofghosts/ziggy-karma.svg?style=flat)](https://travis-ci.org/jarofghosts/ziggy-karma)
+[![npm install](http://img.shields.io/npm/dm/ziggy-karma.svg?style=flat)](https://www.npmjs.org/package/ziggy-karma)
 
 a karma plugin for [ziggy](https://github.com/jarofghosts/ziggy)
 
 ## usage
 
-#### !m, !merit, !motivate, !thanks, !ty `<name>`
+#### !m, !merit, !motivate, !thanks, !ty, !durant `<name>`
 
 add a karma point to `<name>`
 
