@@ -54,9 +54,9 @@ function karma(ziggy, _db, _onchange) {
       if (!karma_user) karma_user = channel
 
       if(karma_user === channel){
-        ziggy.say(channel, 'Thanks' + karma_user + '. You guys and gals are da real mvps.')
-      }else{
-        ziggy.say(channel, 'Thanks' + karma_user + '. You da real mvp.')
+        ziggy.say(channel, 'Thanks ' + karma_user + '. You guys and gals are da real mvps.')
+      } else {
+        ziggy.say(channel, 'Thanks ' + karma_user + '. You da real mvp.')
       }
 
       set_karma(karma_user, 1)
