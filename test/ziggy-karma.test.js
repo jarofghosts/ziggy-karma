@@ -128,6 +128,20 @@ run_test(
   , 'Thank you, #narf, you are a fine human being!'
   , 1
 )
+run_test(
+    '!durant'
+  , '#haarf'
+  , ''
+  , 'Thanks #haarf. You guys and gals are da real mvps.'
+  , 1
+)
+run_test(
+    '!durant'
+  , '#haarf'
+  , 'zoofus'
+  , 'Thanks zoofus. You da real mvp.'
+  , 1
+)
 
 check_test('!k', '#woo', 'larry', 'larry has 5 karma points!', 5)
 check_test('!karma', '#woo', 'harry', 'harry has 1 karma point!', 1)
