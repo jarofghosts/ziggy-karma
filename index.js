@@ -23,7 +23,7 @@ function karma(ziggy, _db, _onchange) {
       , karma_user = bits.length > 1 ? bits.slice(1).join(' ').trim() : null
       , command = bits[0]
 
-    if (command[0] !== '!') return
+    if(command[0] !== '!') return
 
     ({
         '!m': motivate
@@ -44,33 +44,37 @@ function karma(ziggy, _db, _onchange) {
     }[command] || noop)()
 
     function motivate() {
-      if (!karma_user) karma_user = channel
+      if(!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing great work, ' + karma_user + '!')
 
       set_karma(karma_user, 1)
     }
 
     function durant() {
-      if (!karma_user) karma_user = channel
+      var message
 
-      if(karma_user === channel){
-        ziggy.say(channel, 'Thanks ' + karma_user + '. You guys and gals are da real mvps.')
-      } else {
-        ziggy.say(channel, 'Thanks ' + karma_user + '. You da real mvp.')
-      }
+      if(!karma_user) karma_user = channel
+
+      message = 'Thanks ' + karma_user + '. You '
+      message += (
+          karma_user === channel ?
+            'guys and gals are da real mvps.' : 'da real mvp.'
+      )
+
+      ziggy.say(channel, message)
 
       set_karma(karma_user, 1)
     }
 
     function demotivate() {
-      if (!karma_user) karma_user = channel
+      if(!karma_user) karma_user = channel
       ziggy.say(channel, 'You\'re doing terrible work, ' + karma_user + '!')
 
       set_karma(karma_user, -1)
     }
 
     function flog() {
-      if (!karma_user) karma_user = channel
+      if(!karma_user) karma_user = channel
       ziggy.say(
           channel
         , 'You\'re doing terrible work, ' + karma_user +
@@ -81,14 +85,14 @@ function karma(ziggy, _db, _onchange) {
     }
 
     function high_five() {
-      if (!karma_user) karma_user = channel
+      if(!karma_user) karma_user = channel
       ziggy.say(channel, 'High five, ' + karma_user + '! Great work!')
 
       set_karma(karma_user, 10)
     }
 
     function thank_user() {
-      if (!karma_user) karma_user = channel
+      if(!karma_user) karma_user = channel
       ziggy.say(
           channel
         , 'Thank you, ' + karma_user + ', you are a fine human being!'
@@ -98,12 +102,13 @@ function karma(ziggy, _db, _onchange) {
     }
 
     function check_points() {
-      if (!karma_user) karma_user = user.nick
+      if(!karma_user) karma_user = user.nick
+
       db.get(karma_user.toLowerCase(), show_karma)
 
       function show_karma(err, previous) {
-        if (err) {
-          if (err.type !== 'NotFoundError') return
+        if(err) {
+          if(err.type !== 'NotFoundError') return
           previous = 0
         }
 
@@ -122,8 +127,9 @@ function karma(ziggy, _db, _onchange) {
     db.get(entity, modify_karma)
 
     function modify_karma(err, current) {
-      if (err) {
-        if (err.type !== 'NotFoundError') return
+      if(err) {
+        if(err.type !== 'NotFoundError') return
+
         current = 0
       }
 
